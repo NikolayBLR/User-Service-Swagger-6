@@ -8,6 +8,7 @@ import org.example.exception.UserNotFoundException;
 import org.example.mapper.UserMapperDTO;
 import org.example.repository.UserRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class UserService {
@@ -24,6 +25,7 @@ public class UserService {
         this.kafkaProducerService = kafkaProducerService;
     }
 
+    @Transactional
     public ResponseUser saveUser(RequestUser requestUser) {
         User user1 = userMapperDTO.UserMapResponse(requestUser);
         User user2 = userRepository.save(user1);
@@ -35,12 +37,14 @@ public class UserService {
         return responseUser;
     }
 
+    @Transactional
     public ResponseUser getUser(Integer id) {
         User user = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("Not found User"));
         ResponseUser responseUser = userMapperDTO.UserMapRequest(user);
         return responseUser;
     }
 
+    @Transactional
     public ResponseUser deleteUser(Integer id) {
         User user = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("Not found User"));
         userRepository.delete(user);
@@ -51,6 +55,7 @@ public class UserService {
         return responseUser;
     }
 
+    @Transactional
     public ResponseUser updateUser(Integer id, RequestUser user) {
         User user2 = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("Not found User"));
         user2.setName(user.getName());
