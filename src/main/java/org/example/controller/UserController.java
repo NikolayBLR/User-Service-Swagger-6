@@ -5,7 +5,7 @@ import org.example.dto.RequestUser;
 import org.example.dto.ResponseUser;
 import org.example.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+import org.springframework.hateoas.EntityModel;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,6 +14,9 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RequestMapping("api/user")
 @RestController
@@ -27,26 +30,34 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<ResponseUser> saveUser(@Valid @RequestBody RequestUser user) {
+    public ResponseUser saveUser(@Valid @RequestBody RequestUser user) {
         var user1 = userService.saveUser(user);
-        return ResponseEntity.ok(user1);
+        return user1;
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ResponseUser> getUser(@PathVariable Integer id) {
+    public EntityModel<ResponseUser> getUser(@PathVariable Integer id) {
         var user1 = userService.getUser(id);
-        return ResponseEntity.ok(user1);
+        EntityModel<ResponseUser> model = EntityModel.of(user1);
+        model.add(linkTo(methodOn(UserController.class).getUser(id)).withSelfRel());
+        model.add(linkTo(methodOn(UserController.class).updateUser(id, null)).withRel("update"));
+        model.add(linkTo(methodOn(UserController.class).deleteUser(id)).withRel("delete"));
+        return model;
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<ResponseUser> deleteUser(@PathVariable Integer id) {
+    public ResponseUser deleteUser(@PathVariable Integer id) {
         var user1 = userService.deleteUser(id);
-        return ResponseEntity.ok(user1);
+        return user1;
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ResponseUser> updateUser(@PathVariable Integer id, @Valid @RequestBody RequestUser user) {
+    public EntityModel<ResponseUser> updateUser(@PathVariable Integer id, @Valid @RequestBody RequestUser user) {
         var user1 = userService.updateUser(id, user);
-        return ResponseEntity.ok(user1);
+        EntityModel<ResponseUser> model = EntityModel.of(user1);
+        model.add(linkTo(methodOn(UserController.class).getUser(id)).withSelfRel());
+        model.add(linkTo(methodOn(UserController.class).updateUser(id, null)).withRel("update"));
+        model.add(linkTo(methodOn(UserController.class).deleteUser(id)).withRel("delete"));
+        return model;
     }
 }
