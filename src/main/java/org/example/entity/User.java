@@ -27,7 +27,6 @@ public class User {
     private Instant created_at;
 
     public User(String name, String email, Integer age) {
-
         this.name = name;
         this.email = email;
         this.age = age;

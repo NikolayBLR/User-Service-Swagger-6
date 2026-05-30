@@ -13,8 +13,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class UserService {
 
-    private final String CREATE = "создание";
-    private final String DELETE = "удаление";
+    private static final String CREATE = "создание";
+    private static final String DELETE = "удаление";
     private final UserRepository userRepository;
     private final UserMapperDTO userMapperDTO;
     private final KafkaProducerService kafkaProducerService;

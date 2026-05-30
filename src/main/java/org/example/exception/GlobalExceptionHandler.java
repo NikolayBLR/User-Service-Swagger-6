@@ -20,6 +20,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<?> handleException(Exception e) {
+        e.printStackTrace();
         return ResponseEntity.status(500).body(e.getMessage());
     }
 }

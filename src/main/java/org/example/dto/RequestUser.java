@@ -10,7 +10,6 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-
 public class RequestUser {
     @NotNull
     private String name;

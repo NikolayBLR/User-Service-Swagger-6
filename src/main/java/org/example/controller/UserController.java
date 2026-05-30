@@ -1,10 +1,10 @@
 package org.example.controller;
 
 import jakarta.validation.Valid;
+import lombok.AllArgsConstructor;
 import org.example.dto.RequestUser;
 import org.example.dto.ResponseUser;
 import org.example.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,16 +18,12 @@ import org.springframework.web.bind.annotation.RestController;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
+@AllArgsConstructor
 @RequestMapping("api/user")
 @RestController
 public class UserController {
 
     private final UserService userService;
-
-    @Autowired
-    public UserController(UserService userService) {
-        this.userService = userService;
-    }
 
     @PostMapping
     public ResponseUser saveUser(@Valid @RequestBody RequestUser user) {
